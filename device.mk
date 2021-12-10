@@ -14,7 +14,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 # Get non-open-source specific aspects
-$(call inherit-product, vendor/xiaomi/cas/cas-vendor.mk)
+$(call inherit-product, vendor/xiaomi/thyme/thyme-vendor.mk)
 
 # Additional native libraries
 PRODUCT_COPY_FILES += \
