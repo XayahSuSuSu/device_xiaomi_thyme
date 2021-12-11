@@ -5,6 +5,12 @@ ro.charger.enable_suspend=1
 debug.sf.disable_backpressure=1
 debug.sf.enable_hwc_vds=1
 
+# Debug
+persist.sys.usb.config=adb
+ro.debuggable=1
+ro.adb.secure=0
+ro.force.debuggable=1
+
 # IMS
 persist.dbg.volte_avail_ovr=1
 persist.dbg.vt_avail_ovr=1
