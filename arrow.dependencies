@@ -9,7 +9,7 @@
   },
   {
     "repository": "android_kernel_xiaomi_cas",
-    "target_path": "kernel/xiaomi/cas"
+    "target_path": "kernel/xiaomi/thyme"
   },
   {
     "repository": "android_packages_apps_GcamGOPrebuilt",

@@ -9,19 +9,19 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from the device configuration.
-$(call inherit-product, device/xiaomi/cas/device.mk)
+$(call inherit-product, device/xiaomi/thyme/device.mk)
 
 # Inherit from the ArrowOS configuration.
 $(call inherit-product, vendor/arrow/config/common.mk)
 
-PRODUCT_NAME := arrow_cas
-PRODUCT_DEVICE := cas
+PRODUCT_NAME := arrow_thyme
+PRODUCT_DEVICE := thyme
 PRODUCT_BRAND := Xiaomi
-PRODUCT_MODEL := M2007J1SC
+PRODUCT_MODEL := M2102J2SC
 PRODUCT_MANUFACTURER := Xiaomi
 
 DEVICE_MAINTAINER := Xayah
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-BUILD_FINGERPRINT := Xiaomi/cas/cas:11/RKQ1.200826.002/V12.5.6.0.RJJCNXM:user/release-keys
+BUILD_FINGERPRINT := Xiaomi/thyme/thyme:11/RKQ1.200826.002/V12.5.8.0.RGACNXM:user/release-keys

@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/xiaomi/cas
+DEVICE_PATH := device/xiaomi/thyme
 
 # AVB
 BOARD_AVB_ENABLE := true
@@ -37,7 +37,7 @@ TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := kryo385
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := cas
+TARGET_OTA_ASSERT_DEVICE := thyme
 
 # Audio
 AUDIO_FEATURE_ENABLED_EXTENDED_COMPRESS_FORMAT := true
@@ -130,8 +130,8 @@ BOARD_RAMDISK_OFFSET := 0x01000000
 
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/$(HOST_OS)-x86/dtc/dtc
-TARGET_KERNEL_SOURCE := kernel/xiaomi/cas
-TARGET_KERNEL_CONFIG := cas_defconfig
+TARGET_KERNEL_SOURCE := kernel/xiaomi/thyme
+TARGET_KERNEL_CONFIG := thyme_defconfig
 
 # Metadata
 BOARD_USES_METADATA_PARTITION := true
@@ -222,4 +222,4 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit from the proprietary version
-include vendor/xiaomi/cas/BoardConfigVendor.mk
+include vendor/xiaomi/thyme/BoardConfigVendor.mk

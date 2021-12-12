@@ -5,9 +5,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/arrow_cas.mk
+    $(LOCAL_DIR)/arrow_thyme.mk
 
 COMMON_LUNCH_CHOICES := \
-    arrow_cas-eng \
-    arrow_cas-user \
-    arrow_cas-userdebug
+    arrow_thyme-eng \
+    arrow_thyme-user \
+    arrow_thyme-userdebug
