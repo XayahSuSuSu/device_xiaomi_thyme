@@ -256,6 +256,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     fstab.qcom \
+    fstab.qcom.vendor \
     init.class_main.sh \
     init.mdm.sh \
     init.mi.usb.sh \
