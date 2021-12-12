@@ -424,6 +424,9 @@ on post-fs-data
     #Create dir for TUI
     mkdir /data/vendor/tui 0700 system drmrpc
 
+    #Create dir for dolby
+    mkdir /data/vendor/dolby 0770 media media
+
 service nqnfcinfo /system/vendor/bin/nqnfcinfo
     class late_start
     group nfc
@@ -520,7 +523,7 @@ on property:vendor.radio.atfwd.start=false
 # corefile limit
 on property:persist.debug.trace=1
     mkdir /data/core 0777 root root
-    write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
+    write /proc/sys/kernel/core_pattern "/data/core/core-%e-%p"
 
 on property:vendor.bluetooth.startwdsdaemon=true
     start vendor.bt_wdsdaemon
@@ -1052,13 +1055,6 @@ on property:vendor.opengles.version=*
 #Set gpu available frequencies property
 on property:vendor.gpu.available_frequencies=*
     setprop ro.vendor.gpu.available_frequencies ${vendor.gpu.available_frequencies}
-
-on property:vendor.perf.gpu_maxfreq.enable=true
-    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
-
-on property:vendor.perf.gpu_maxfreq.enable=false
-    write /sys/class/kgsl/kgsl-3d0/min_pwrlevel 10
-    write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 2
 
 service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
     override

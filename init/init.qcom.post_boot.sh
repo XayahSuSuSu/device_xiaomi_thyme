@@ -573,14 +573,14 @@ function configure_zram_parameters() {
             if [ -f /sys/block/zram0/use_dedup ]; then
                 echo 1 > /sys/block/zram0/use_dedup
             fi
-            if [ $MemTotal -le 524288 ]; then
-                echo 402653184 > /sys/block/zram0/disksize
-            elif [ $MemTotal -le 1048576 ]; then
-                echo 805306368 > /sys/block/zram0/disksize
-            else
-                zramDiskSize=$zRamSizeMB$diskSizeUnit
-                echo $zramDiskSize > /sys/block/zram0/disksize
-            fi
+#            if [ $MemTotal -le 524288 ]; then
+#                echo 402653184 > /sys/block/zram0/disksize
+#            elif [ $MemTotal -le 1048576 ]; then
+#                echo 805306368 > /sys/block/zram0/disksize
+#            else
+#                zramDiskSize=$zRamSizeMB$diskSizeUnit
+#                echo $zramDiskSize > /sys/block/zram0/disksize
+#            fi
 
             # ZRAM may use more memory than it saves if SLAB_STORE_USER
             # debug option is enabled.
@@ -650,8 +650,6 @@ function enable_swap() {
     fi
 }
 
-ProductName=`getprop ro.product.name`
-DeviceName=`getprop ro.product.device`
 function configure_memory_parameters() {
     # Set Memory parameters.
     #
@@ -672,22 +670,34 @@ function configure_memory_parameters() {
     # Set allocstall_threshold to 0 for all targets.
     #
 
-low_ram=`getprop ro.config.low_ram`
+    ProductName=`getprop ro.product.name`
+    low_ram=`getprop ro.config.low_ram`
 
-if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ]; then
-      # Enable ZRAM
-      configure_zram_parameters
-      configure_read_ahead_kb_values
-      echo 0 > /proc/sys/vm/page-cluster
-      echo 100 > /proc/sys/vm/swappiness
-else
-    arch_type=`uname -m`
-    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-    MemTotal=${MemTotalStr:16:8}
+    if [ "$ProductName" == "msmnile" ] || [ "$ProductName" == "kona" ] || [ "$ProductName" == "sdmshrike_au" ] || [ "$ProductName" == "alioth" ] ; then
+        # Enable ZRAM
+        configure_zram_parameters
+        configure_read_ahead_kb_values
+        echo 0 > /proc/sys/vm/page-cluster
+        echo 100 > /proc/sys/vm/swappiness
 
-    # Set parameters for 32-bit Go targets.
-    if [ $MemTotal -le 1048576 ] && [ "$low_ram" == "true" ]; then
-        # Disable KLMK, ALMK, PPR & Core Control for Go devices
+        #add memory limit to camera cgroup
+        MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+        MemTotal=${MemTotalStr:16:8}
+        if [ $MemTotal -gt 8388608 ]; then
+            let LimitSize=838860800
+        else
+            let LimitSize=524288000
+        fi
+
+        echo $LimitSize > /dev/memcg/camera/memory.soft_limit_in_bytes
+    else
+        arch_type=`uname -m`
+        MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+        MemTotal=${MemTotalStr:16:8}
+
+        # Set parameters for 32-bit Go targets.
+        if [ $MemTotal -le 1048576 ] && [ "$low_ram" == "true" ]; then
+            # Disable KLMK, ALMK, PPR & Core Control for Go devices
         echo 0 > /sys/module/lowmemorykiller/parameters/enable_lmk
         echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
         echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim
@@ -793,6 +803,9 @@ else
     echo 1 > /proc/sys/vm/watermark_scale_factor
 
     # Disable the feature of watermark boost for 8G and below device
+    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+    MemTotal=${MemTotalStr:16:8}
+
     if [ $MemTotal -le 8388608 ]; then
         echo 0 > /proc/sys/vm/watermark_boost_factor
     fi
@@ -5268,10 +5281,6 @@ case "$target" in
         echo "0:0 1:0 2:0 3:0 4:2342400 5:0 6:0 7:2361600" > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_freq
         echo 400 > /sys/devices/system/cpu/cpu_boost/powerkey_input_boost_ms
 
-	# limt the GPU max frequency
-	if [ "$ProductName" == "cas" ] || [ "$DeviceName" == "apollo" ]; then
-		echo 3 > /sys/class/kgsl/kgsl-3d0/max_pwrlevel
-	fi
 	# configure governor settings for gold cluster
 	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
 	echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/down_rate_limit_us
